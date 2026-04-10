@@ -1163,11 +1163,21 @@ with st.sidebar:
             unsafe_allow_html=True)
 
     st.divider()
-    nav_pages=["Dashboard","Actions","Meetings","Root Cause Analysis","Projects","Admin Configuration"]
-    icons={"Dashboard":"🏠","Actions":"✅","Meetings":"📅","Root Cause Analysis":"🔍",
-           "Projects":"📂","Admin Configuration":"⚙️"}
-    selected=st.radio("",nav_pages,key="nav_radio",
-                      format_func=lambda x:f"{icons.get(x,'')}  {x}")
+   nav_pages = ["Dashboard", "Actions", "Meetings", "Root Cause Analysis", "Projects", "Admin Configuration"]
+    icons = {"Dashboard":"🏠", "Actions":"✅", "Meetings":"📅", "Root Cause Analysis":"🔍", "Projects":"📂", "Admin Configuration":"⚙️"}
+
+    if "page" not in st.session_state:
+        st.session_state.page = "Dashboard"
+
+    selected = st.radio(
+        label="Navigation",
+        options=nav_pages,
+        key="nav_radio",
+        index=nav_pages.index(st.session_state.page),
+        label_visibility="collapsed",
+        format_func=lambda x: f"{icons.get(x, '')}  {x}"
+    )
+    st.session_state.page = selected   # safe sync
     st.divider()
     if st.button("⚠️ Log Deviation",use_container_width=True,key="sb_dev"): deviation_dialog()
     st.divider()
