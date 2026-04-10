@@ -534,36 +534,38 @@ def project_dialog():
 #  PAGE: DASHBOARD
 # ═══════════════════════════════════════════════════════════════
 def render_dashboard():
-    hr=datetime.now().hour
-    greeting="Good morning" if hr<12 else ("Good afternoon" if hr<17 else "Good evening")
-    first=st.session_state.user.split()[0]
+    hr = datetime.now().hour
+    greeting = "Good morning" if hr < 12 else ("Good afternoon" if hr < 17 else "Good evening")
+    first = st.session_state.user.split()[0]
     st.title("Action & Review")
     st.subheader(f"{greeting}, {first}")
 
-    od=overdue_actions(); tm=today_meetings(); my_a=my_actions()
-    exp_data,ext,mime=actions_to_excel()
-    rpt=performance_report_excel()
+    od = overdue_actions()
+    tm = today_meetings()
+    my_a = my_actions()
+    exp_data, ext, mime = actions_to_excel()
+    rpt = performance_report_excel()
 
-    m1,m2,m3,m4,m5=st.columns(5)
-    with m1: st.metric("Overdue Actions",len(od),"⚠️ Attention needed" if od else "✅ All clear")
+    m1, m2, m3, m4, m5 = st.columns(5)
+    with m1: st.metric("Overdue Actions", len(od), "⚠️ Attention needed" if od else "✅ All clear")
     with m2:
-        live_n=sum(1 for m in tm if m["status"]=="Live")
-        st.metric("Meetings Today",len(tm),f"🔴 {live_n} live" if live_n else "Scheduled")
+        live_n = sum(1 for m in tm if m["status"] == "Live")
+        st.metric("Meetings Today", len(tm), f"🔴 {live_n} live" if live_n else "Scheduled")
     with m3:
-        my_od=sum(1 for a in my_a if a["status"]=="Overdue")
-        st.metric("My Open Actions",len(my_a),f"🔴 {my_od} overdue" if my_od else "On track")
+        my_od = sum(1 for a in my_a if a["status"] == "Overdue")
+        st.metric("My Open Actions", len(my_a), f"🔴 {my_od} overdue" if my_od else "On track")
     with m4:
-        st.download_button("📤 Export Actions",data=exp_data,
-            file_name=f"nexis_actions_{date.today()}.{ext}",mime=mime,
-            width="stretch",type="primary")
+        st.download_button("📤 Export Actions", data=exp_data,
+                           file_name=f"nexis_actions_{date.today()}.{ext}", mime=mime,
+                           use_container_width=True, type="primary")
     with m5:
         if rpt:
-            st.download_button("📊 Daily Report",data=rpt,
-                file_name=f"nexis_performance_{date.today()}.xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                width="stretch",type="primary")
+            st.download_button("📊 Daily Report", data=rpt,
+                               file_name=f"nexis_performance_{date.today()}.xlsx",
+                               mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                               use_container_width=True, type="primary")
         else:
-            if st.button("📊 Daily Report",width="stretch",type="primary"):
+            if st.button("📊 Daily Report", use_container_width=True, type="primary"):
                 st.toast("Report generated ✅")
 
     # Orb
@@ -579,17 +581,23 @@ def render_dashboard():
         <span style="color:#e6edf3;font-size:21px;font-weight:700;letter-spacing:-1px;margin:2px 0">NEXIS</span>
         <span style="color:#93c5d6;font-size:9px;letter-spacing:2.5px;text-transform:uppercase">Action &amp; Review</span>
       </div>
-    </div>""",unsafe_allow_html=True)
+    </div>""", unsafe_allow_html=True)
 
-    # Quick actions
-    qc=st.columns(6)
-    btns=[("📅","Create Meeting","primary"),("➕","Create Action","primary"),("🔍","Run RCA","primary"),
-          ("⚠️","Log Deviation","secondary"),("📂","Projects","secondary"),("🗓️","All Meetings","secondary")]
-    for col,(icon,label,kind) in zip(qc,btns):
+    # Quick actions (fixed indentation + safe page switching)
+    qc = st.columns(6)
+    btns = [
+        ("📅", "Create Meeting", "primary"),
+        ("➕", "Create Action", "primary"),
+        ("🔍", "Run RCA", "primary"),
+        ("⚠️", "Log Deviation", "secondary"),
+        ("📂", "Projects", "secondary"),
+        ("🗓️", "All Meetings", "secondary")
+    ]
+    for col, (icon, label, kind) in zip(qc, btns):
         with col:
-            if st.button(f"{icon}  {label}",width="stretch",
-                         type="primary" if kind=="primary" else "secondary"):
-                                if label == "Create Meeting":
+            if st.button(f"{icon}  {label}", use_container_width=True,
+                         type="primary" if kind == "primary" else "secondary"):
+                if label == "Create Meeting":
                     meeting_dialog()
                 elif label == "Create Action":
                     action_dialog()
