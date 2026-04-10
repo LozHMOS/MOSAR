@@ -402,9 +402,9 @@ def action_dialog(action_id=None, prefill_origin=None):
     st.divider()
     bc1,bc2=st.columns(2)
     with bc1:
-        if st.button("Cancel",use_container_width=True): st.rerun()
+        if st.button("Cancel",width="stretch"): st.rerun()
     with bc2:
-        if st.button("💾 Save Action",type="primary",use_container_width=True):
+        if st.button("💾 Save Action",type="primary",width="stretch"):
             if not title.strip(): st.error("Title is required."); return
             att_list=(a.get("attachments",[]) if edit else [])
             if uploaded: att_list=att_list+[uploaded.name]
@@ -451,9 +451,9 @@ def meeting_dialog(from_rca=False):
     st.divider()
     bc1,bc2=st.columns(2)
     with bc1:
-        if st.button("Cancel",use_container_width=True): st.rerun()
+        if st.button("Cancel",width="stretch"): st.rerun()
     with bc2:
-        if st.button("💾 Save Meeting",type="primary",use_container_width=True):
+        if st.button("💾 Save Meeting",type="primary",width="stretch"):
             if not title.strip(): st.error("Title required."); return
             kpis=[k.strip() for k in kpi_raw.split(",") if k.strip()]
             new_m={"id":st.session_state.next_meeting_id,"title":title,"type":mtype,"private":private,
@@ -489,9 +489,9 @@ def deviation_dialog():
     st.divider()
     bc1,bc2=st.columns(2)
     with bc1:
-        if st.button("Cancel",use_container_width=True): st.rerun()
+        if st.button("Cancel",width="stretch"): st.rerun()
     with bc2:
-        if st.button("📌 Log Deviation",type="primary",use_container_width=True):
+        if st.button("📌 Log Deviation",type="primary",width="stretch"):
             if not what.strip(): st.error("Please describe what happened."); return
             dev={"id":st.session_state.next_dev_id,"what":what,"why":why,"immediate":immediate,
                  "team":team,"ts":str(datetime.now())[:16],"linked":None}
@@ -520,9 +520,9 @@ def project_dialog():
     st.divider()
     bc1,bc2=st.columns(2)
     with bc1:
-        if st.button("Cancel",use_container_width=True): st.rerun()
+        if st.button("Cancel",width="stretch"): st.rerun()
     with bc2:
-        if st.button("💾 Save",type="primary",use_container_width=True):
+        if st.button("💾 Save",type="primary",width="stretch"):
             if not name.strip(): st.error("Name required."); return
             st.session_state.projects.append({"id":st.session_state.next_project_id,"name":name,
                 "owner":owner,"team":team,"start":start,"end":end,"progress":0,"actions":0,"status":"Active"})
@@ -555,15 +555,15 @@ def render_dashboard():
     with m4:
         st.download_button("📤 Export Actions",data=exp_data,
             file_name=f"nexis_actions_{date.today()}.{ext}",mime=mime,
-            use_container_width=True,type="primary")
+            width="stretch",type="primary")
     with m5:
         if rpt:
             st.download_button("📊 Daily Report",data=rpt,
                 file_name=f"nexis_performance_{date.today()}.xlsx",
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                use_container_width=True,type="primary")
+                width="stretch",type="primary")
         else:
-            if st.button("📊 Daily Report",use_container_width=True,type="primary"):
+            if st.button("📊 Daily Report",width="stretch",type="primary"):
                 st.toast("Report generated ✅")
 
     # Orb
@@ -587,7 +587,7 @@ def render_dashboard():
           ("⚠️","Log Deviation","secondary"),("📂","Projects","secondary"),("🗓️","All Meetings","secondary")]
     for col,(icon,label,kind) in zip(qc,btns):
         with col:
-            if st.button(f"{icon}  {label}",use_container_width=True,
+            if st.button(f"{icon}  {label}",width="stretch",
                          type="primary" if kind=="primary" else "secondary"):
                 if label=="Create Meeting": meeting_dialog()
                 elif label=="Create Action": action_dialog()
@@ -671,7 +671,7 @@ def render_dashboard():
                               margin=dict(t=8,b=8,l=8,r=8),height=160,
                               xaxis=dict(color="#8b949e",showgrid=False),
                               yaxis=dict(color="#8b949e",showgrid=False))
-            st.plotly_chart(fig,use_container_width=True,config={"displayModeBar":False})
+            st.plotly_chart(fig,width="stretch",config={"displayModeBar":False})
 
         # Status donut
         st.markdown('<p class="section-lbl">Action Status</p>',unsafe_allow_html=True)
@@ -685,7 +685,7 @@ def render_dashboard():
                 showlegend=False,margin=dict(t=6,b=6,l=6,r=6),height=175,
                 annotations=[dict(text=f"<b>{len(st.session_state.actions)}</b><br>Total",
                     x=.5,y=.5,font_color="#22d3ee",font_size=12,showarrow=False)])
-            st.plotly_chart(fig2,use_container_width=True,config={"displayModeBar":False})
+            st.plotly_chart(fig2,width="stretch",config={"displayModeBar":False})
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -701,9 +701,9 @@ def render_actions():
     with fc[4]:
         exp_data,ext,mime=actions_to_excel()
         st.download_button("⬇️ Export",data=exp_data,file_name=f"actions_{date.today()}.{ext}",
-            mime=mime,use_container_width=True,help="Export to Excel")
+            mime=mime,width="stretch",help="Export to Excel")
     with fc[5]:
-        if st.button("➕ New",type="primary",use_container_width=True): action_dialog()
+        if st.button("➕ New",type="primary",width="stretch"): action_dialog()
 
     al=st.session_state.actions
     if q: ql=q.lower(); al=[a for a in al if ql in a["title"].lower() or ql in str(a["id"])]
@@ -748,7 +748,7 @@ def render_meetings():
     st.title("Meetings")
     bc1,_,bc2=st.columns([2,6,2])
     with bc1:
-        if st.button("📅 Create New Meeting",type="primary",use_container_width=True): meeting_dialog()
+        if st.button("📅 Create New Meeting",type="primary",width="stretch"): meeting_dialog()
     with bc2:
         view=st.selectbox("View",["All Meetings","Today","This Week","My Meetings"],label_visibility="collapsed")
 
@@ -789,7 +789,7 @@ def render_meetings():
             </div>""",unsafe_allow_html=True)
         with col_b:
             st.markdown("<div style='height:20px'></div>",unsafe_allow_html=True)
-            if st.button("Open",key=f"om_{m['id']}",use_container_width=True):
+            if st.button("Open",key=f"om_{m['id']}",width="stretch"):
                 st.session_state.sel_meeting=m["id"]; st.rerun()
 
 
@@ -818,7 +818,7 @@ def render_meeting_detail(m):
     bc=st.columns([2,2,2,2,4])
     with bc[0]:
         if m["status"]=="Scheduled":
-            if st.button("▶️ Start Meeting",type="primary",use_container_width=True):
+            if st.button("▶️ Start Meeting",type="primary",width="stretch"):
                 if idx is not None:
                     st.session_state.meetings[idx]["status"]="Live"
                     st.session_state.meetings[idx]["history"].append({"ts":str(datetime.now())[:16],"event":f"Started by {st.session_state.user}"})
@@ -826,17 +826,17 @@ def render_meeting_detail(m):
         elif m["status"]=="Live":
             st.markdown('<div class="live-timer" style="background:rgba(34,211,238,.1);border:1px solid #22d3ee;border-radius:8px;padding:6px 12px;color:#22d3ee;font-size:13px">🔴 LIVE</div>',unsafe_allow_html=True)
     with bc[1]:
-        if st.button("✅ Confirm Attendance",use_container_width=True): st.toast("Attendance confirmed ✅")
+        if st.button("✅ Confirm Attendance",width="stretch"): st.toast("Attendance confirmed ✅")
     with bc[2]:
         if m["status"]=="Live":
-            if st.button("⏹ End Meeting",use_container_width=True):
+            if st.button("⏹ End Meeting",width="stretch"):
                 if idx is not None:
                     st.session_state.meetings[idx]["status"]="Completed"
                     st.session_state.meetings[idx]["history"].append({"ts":str(datetime.now())[:16],"event":f"Ended by {st.session_state.user}"})
                 st.rerun()
     with bc[3]:
         if m["status"] not in ("Completed","Cancelled"):
-            if st.button("❌ Cancel Meeting",use_container_width=True):
+            if st.button("❌ Cancel Meeting",width="stretch"):
                 if idx is not None:
                     st.session_state.meetings[idx]["status"]="Cancelled"
                     st.session_state.meetings[idx]["history"].append({"ts":str(datetime.now())[:16],"event":f"Cancelled by {st.session_state.user}"})
@@ -857,7 +857,7 @@ def render_meeting_detail(m):
         nc1,nc2=st.columns([3,1])
         with nc1: new_guest=st.text_input("Add Guest","",placeholder="Guest name…",label_visibility="collapsed")
         with nc2:
-            if st.button("Add",use_container_width=True) and new_guest.strip():
+            if st.button("Add",width="stretch") and new_guest.strip():
                 if idx is not None: st.session_state.meetings[idx]["attendees"].append({"name":new_guest.strip(),"present":False,"facilitator":False})
                 st.rerun()
 
@@ -922,7 +922,7 @@ def render_rca():
     st.title("Root Cause Analysis")
     bc1,_,bc2=st.columns([2,6,2])
     with bc1:
-        if st.button("🔍 New RCA",type="primary",use_container_width=True): meeting_dialog(from_rca=True)
+        if st.button("🔍 New RCA",type="primary",width="stretch"): meeting_dialog(from_rca=True)
     st.divider()
     if not st.session_state.rcas: st.info("No RCAs created yet. Click **New RCA** to begin.")
     for r in st.session_state.rcas:
@@ -940,7 +940,7 @@ def render_rca():
                 </div>{badge(r['status'])}</div></div>""",unsafe_allow_html=True)
         with col_b:
             st.markdown("<div style='height:20px'></div>",unsafe_allow_html=True)
-            if st.button("Open",key=f"or_{r['id']}",use_container_width=True):
+            if st.button("Open",key=f"or_{r['id']}",width="stretch"):
                 st.session_state.sel_rca=r["id"]; st.rerun()
 
 
@@ -1042,7 +1042,7 @@ def render_projects():
     st.title("Projects")
     bc1,_=st.columns([2,8])
     with bc1:
-        if st.button("➕ New Project",type="primary",use_container_width=True): project_dialog()
+        if st.button("➕ New Project",type="primary",width="stretch"): project_dialog()
     st.divider()
     if not st.session_state.projects: st.info("No projects yet.")
     for p in st.session_state.projects:
@@ -1179,7 +1179,7 @@ with st.sidebar:
     )
     st.session_state.page = selected   # safe sync
     st.divider()
-    if st.button("⚠️ Log Deviation",use_container_width=True,key="sb_dev"): deviation_dialog()
+    if st.button("⚠️ Log Deviation",width="stretch",key="sb_dev"): deviation_dialog()
     st.divider()
     st.markdown(f"""
     <div style="padding:6px 0">
