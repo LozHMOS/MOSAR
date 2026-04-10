@@ -589,12 +589,20 @@ def render_dashboard():
         with col:
             if st.button(f"{icon}  {label}",width="stretch",
                          type="primary" if kind=="primary" else "secondary"):
-                if label=="Create Meeting": meeting_dialog()
-                elif label=="Create Action": action_dialog()
-                elif label=="Run RCA": meeting_dialog(from_rca=True)
-                elif label=="Log Deviation": deviation_dialog()
-                elif label=="Projects": st.session_state.nav_radio="Projects"; st.rerun()
-                elif label=="All Meetings": st.session_state.nav_radio="Meetings"; st.rerun()
+                                if label == "Create Meeting":
+                    meeting_dialog()
+                elif label == "Create Action":
+                    action_dialog()
+                elif label == "Run RCA":
+                    meeting_dialog(from_rca=True)
+                elif label == "Log Deviation":
+                    deviation_dialog()
+                elif label == "Projects":
+                    st.session_state.page = "Projects"
+                    st.rerun()
+                elif label == "All Meetings":
+                    st.session_state.page = "Meetings"
+                    st.rerun()
 
     st.divider()
 
